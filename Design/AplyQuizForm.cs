@@ -21,17 +21,14 @@ namespace Design
         {
             InitializeComponent();
             _respondentId = respondentId;
-
-            
-
-            SetControllers(respondentName);
+            SetControllers(quizId, respondentName);
         }
 
-        private async void GetQuiz(int id)
+        private async void SetControllers(int id, string name)
         {
-            var res = await QuizService.GetQuizById(id);
+            var res = await QuizService.GetQuizById(id).ConfigureAwait(false);
 
-            if (res.IsError)
+            if ((bool)(res?.IsError))
             {
                 MessageBox.Show(res.Msg,
                                 "Error",
@@ -40,15 +37,44 @@ namespace Design
             }
             else
             {
-                (res.Data as List<Quiz>).ForEach((quiz) => {
-                    
-                });
+                quiz = res.Data as Quiz;
             }
-        }
 
-        private void SetControllers(string name)
-        {
-            lbRespondentName.Text = name;
+            Invoke(new Action(() =>
+            {
+                lbRespondentName.Text = name;
+            }));            
+
+            quiz.QuizQuestions.Select((question, index) => (question, index)).ToList().ForEach((item) =>
+            {
+                (var question, var index) = item;
+
+                var txtQuestion = new TextBox
+                {
+                    Multiline = true,
+                    Height = 30,
+                    BorderStyle = BorderStyle.None,
+                    Width = tableLayoutPanel1.Width - 20,
+                    Name = "txtQuestion" + index,
+                    Margin = new Padding(10),
+                    Font = new Font("Calibri", 10, FontStyle.Bold)
+                };
+
+                var lbQuestion = new Label
+                {
+                    Name = "lbQuestion" + index,
+                    Text = question.Question,
+                    Font = new Font("Calibri", 10, FontStyle.Bold)
+                };
+
+                Invoke(new Action(() =>
+                {
+                    tableLayoutPanel1.Controls.Add(txtQuestion, 1, index);
+                    tableLayoutPanel1.Controls.Add(lbQuestion, 1, index);
+
+                    tableLayoutPanel1.RowStyles[0].SizeType = SizeType.AutoSize;
+                }));                
+            });
         }
     }
 }

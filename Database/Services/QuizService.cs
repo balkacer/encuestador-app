@@ -76,13 +76,13 @@ namespace Database.Services
         {
             try
             {
-                var quiz = await _context.Quizzes.Include(x => x.QuizQuestions).Where(x => x.Id == id).FirstOrDefaultAsync();
+                var quiz = await _context.Quizzes.Include(x => x.QuizQuestions).Where(x => x.Id == id).FirstOrDefaultAsync().ConfigureAwait(false);
                 if (quiz == null)
                     return new Res(null, "¡Esta encuesta no existe!", true);
                 else
                     return new Res(quiz, "Se ha cargado la encuesta", false);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return new Res(null, "¡Se ha producido un error cargando las encuestas!", true);
             }

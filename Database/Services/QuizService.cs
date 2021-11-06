@@ -82,9 +82,32 @@ namespace Database.Services
                 else
                     return new Res(quiz, "Se ha cargado la encuesta", false);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return new Res(null, "¡Se ha producido un error cargando las encuestas!", true);
+            }
+        }
+
+        public static async Task<Res> Delete(int id)
+        {
+            try
+            {
+                var quiz = await _context.Quizzes
+                    .Where(x => x.Id == id)
+                    .Include(x => x.Respondents)
+                    .Include(x => x.QuizQuestions)
+                    .FirstOrDefaultAsync();
+
+                _context.Quizzes.Attach(quiz);
+                _context.Quizzes.Remove(quiz);
+
+                await _context.SaveChangesAsync();
+
+                return new Res(null, "Encuesta eliminada", false);
+            }
+            catch (Exception)
+            {
+                return new Res(null, "¡Se ha producido un error, proceso de eliminación abortado!", true);
             }
         }
     }

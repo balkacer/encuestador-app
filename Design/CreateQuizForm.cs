@@ -14,9 +14,9 @@ namespace Design
 {
     public partial class CreateQuizForm : Form
     {
-        private int _userId;
-        private int _questionsQuantity;
-        private string _quizName;
+        private readonly int _userId;
+        private readonly int _questionsQuantity;
+        private readonly string _quizName;
         public CreateQuizForm(int userId, int questionsQuantity, string quizName)
         {
             InitializeComponent();

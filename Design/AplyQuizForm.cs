@@ -15,7 +15,7 @@ namespace Design
 {
     public partial class AplyQuizForm : Form
     {
-        private int _respondentId;
+        private readonly int _respondentId;
         private Quiz quiz;
 
         public AplyQuizForm(int respondentId, string respondentName, int quizId)
@@ -108,6 +108,11 @@ namespace Design
             {
                 Utility.CloseOneOpenOne(this, new MainForm(quiz.UserId));
             }
+        }
+
+        private void BtnCancel_Click(object sender, EventArgs e)
+        {
+            Utility.CloseOneOpenOne(this, new MainForm(quiz.UserId));
         }
     }
 }

@@ -43,7 +43,7 @@ namespace Design
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
 
-                Utility.CloseOneOpenOne(this, new LoginForm());
+                Utility.CloseOneOpenOne(this, new LoginForm(username, pass));
             }            
         }
     }

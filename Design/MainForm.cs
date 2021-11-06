@@ -10,7 +10,7 @@ namespace Design
     public partial class MainForm : Form
     {
         private User user;
-        private List<string> selectedQuiz = new();
+        private readonly List<string> selectedQuiz = new();
 
         public MainForm(int id)
         {
@@ -86,11 +86,79 @@ namespace Design
                                 "Error",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Warning);
-
             }
             else
             {
                 Utility.CloseOneOpenOne(this, new AddRespondentForm(int.Parse(selectedQuiz[0])));
+            }
+        }
+
+        private void BtnVisualizeQuiz_Click(object sender, EventArgs e)
+        {
+            if (selectedQuiz.Count < 3)
+            {
+                MessageBox.Show("!Debe seleccionar una encuesta!",
+                                "Error",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+            }
+            else
+            {
+                Utility.CloseOneOpenOne(this, new VisualizeQuizForm(int.Parse(selectedQuiz[0])));
+            }            
+        }
+
+        private async void BtnDeleteQuiz_Click(object sender, EventArgs e)
+        {
+            if (selectedQuiz.Count < 3)
+            {
+                MessageBox.Show("!Debe seleccionar una encuesta!",
+                                "Error",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+            }
+            else
+            {
+                if (MessageBox.Show(
+                    "¿Seguro desea eliminar esta encuesta?",
+                    "Eliminar encuesta",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning) == DialogResult.Yes)
+                {
+                    var res = await QuizService.Delete(int.Parse(selectedQuiz[0]));
+
+                    if (res.IsError)
+                    {
+                        MessageBox.Show(res.Msg,
+                                "Error",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+                    }
+                    else
+                    {
+                        MessageBox.Show(res.Msg,
+                                "Exito",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+
+                        var quizRes = await QuizService.GetAllByUserId(user.Id);
+                        if (quizRes.IsError)
+                        {
+                            MessageBox.Show(quizRes.Msg,
+                                            "Error",
+                                            MessageBoxButtons.OK,
+                                            MessageBoxIcon.Error);
+                        }
+                        else
+                        {
+                            dtGridView.Rows.Clear();
+
+                            (quizRes.Data as List<Quiz>).ForEach((quiz) => {
+                                dtGridView.Rows.Add(quiz.Id, quiz.Name, quiz.Respondents.Count);
+                            });
+                        }
+                    }
+                }
             }
         }
     }

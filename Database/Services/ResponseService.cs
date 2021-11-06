@@ -1,5 +1,6 @@
 ﻿using Database.Classes;
 using Database.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,26 @@ namespace Database.Services
             {
                 return new Res(null, "¡Ha ocurrido un error!\nNo se han podido agregar las respuestas.", true);
             }            
+        }
+
+        public static async Task<Res> GetResponseByRespondentId(int respondentId)
+        {
+            try
+            {
+                var responses = await _context.QuestionResponses
+                    .Include(x => x.QuizQuestion )
+                    .Where(x => x.RespondentId == respondentId)
+                    .ToListAsync();
+
+                if (responses.Count < 1)
+                    return new Res(null, "No hay respuestas que cargar", true);
+
+                return new Res(responses, "Se han cargado las respuestas", false);
+            }
+            catch (Exception)
+            {
+                return new Res(null, "¡Ha ocurrido un error!\nNo se han podidido cargar las respuestas.", true);
+            }
         }
     }
 }

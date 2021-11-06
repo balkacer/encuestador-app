@@ -139,6 +139,7 @@ namespace Design
             this.btnDeleteQuiz.TabIndex = 2;
             this.btnDeleteQuiz.Text = "Eliminar Encuesta";
             this.btnDeleteQuiz.UseVisualStyleBackColor = false;
+            this.btnDeleteQuiz.Click += new System.EventHandler(this.BtnDeleteQuiz_Click);
             // 
             // btnEditQuiz
             // 
@@ -188,6 +189,7 @@ namespace Design
             this.btnVisualizeQuiz.TabIndex = 4;
             this.btnVisualizeQuiz.Text = "Visualizar Encuesta";
             this.btnVisualizeQuiz.UseVisualStyleBackColor = false;
+            this.btnVisualizeQuiz.Click += new System.EventHandler(this.BtnVisualizeQuiz_Click);
             // 
             // btnLogout
             // 

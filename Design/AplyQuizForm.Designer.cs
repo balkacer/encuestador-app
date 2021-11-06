@@ -29,6 +29,7 @@ namespace Design
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AplyQuizForm));
             this.panel1 = new System.Windows.Forms.Panel();
             this.lbRespondent = new System.Windows.Forms.Label();
             this.lbRespondentName = new System.Windows.Forms.Label();
@@ -93,6 +94,7 @@ namespace Design
             this.btnSave.TabIndex = 13;
             this.btnSave.Text = "Guardar";
             this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.BtnSave_Click);
             // 
             // btnCancel
             // 
@@ -112,8 +114,12 @@ namespace Design
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.panel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(460, 625);
+            this.MinimumSize = new System.Drawing.Size(460, 625);
             this.Name = "AplyQuizForm";
-            this.Text = "AplyQuizForm";
+            this.Text = "Aplicar Encuesta";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);

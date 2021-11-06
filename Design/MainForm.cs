@@ -90,7 +90,7 @@ namespace Design
             }
             else
             {
-                Utility.CloseOneOpenOne(this, new AplyQuizForm(1, "Ramiro", int.Parse(selectedQuiz[0])));
+                Utility.CloseOneOpenOne(this, new AddRespondentForm(int.Parse(selectedQuiz[0])));
             }
         }
     }

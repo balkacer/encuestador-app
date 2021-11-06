@@ -1,5 +1,6 @@
 ﻿using Database.Models;
 using Database.Services;
+using Design.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,7 +29,7 @@ namespace Design
         {
             var res = await QuizService.GetQuizById(id).ConfigureAwait(false);
 
-            if ((bool)(res?.IsError))
+            if (res.IsError)
             {
                 MessageBox.Show(res.Msg,
                                 "Error",
@@ -75,6 +76,38 @@ namespace Design
                     tableLayoutPanel1.RowStyles[0].SizeType = SizeType.AutoSize;
                 }));                
             });
+        }
+
+        private async void BtnSave_Click(object sender, EventArgs e)
+        {
+            List<(int, string)> resposes = new();
+            var count = quiz.QuizQuestions.Count; 
+
+            for (int i = 1; i <= count; i++)
+            {
+                int index = (i * 2) - 1;
+                int questionId = quiz.QuizQuestions
+                    .Where(x => x.Question == tableLayoutPanel1.Controls[index].Text)
+                    .Select(x => x.Id).FirstOrDefault();
+
+                string res = tableLayoutPanel1.Controls[(i * 2) - 2].Text;
+
+                resposes.Add((questionId, res));
+            }
+
+            var resRes  = await ResponseService.CreateResponses(_respondentId, resposes.ToArray());
+
+            if (resRes.IsError)
+            {
+                MessageBox.Show(resRes.Msg,
+                                "Error",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
+            else
+            {
+                Utility.CloseOneOpenOne(this, new MainForm(quiz.UserId));
+            }
         }
     }
 }
